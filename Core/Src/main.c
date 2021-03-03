@@ -45,7 +45,10 @@ ADC_HandleTypeDef hadc1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
+uint16_t ADCMode = 0;
+float ADCOutputConverted = 0;
 uint16_t adcdata[2] = { 0 };
+uint16_t ModeState[2] = {0};
 
 typedef struct {
 	ADC_ChannelConfTypeDef Config;
@@ -77,7 +80,6 @@ void ADCPollingMethodUpdate();
  */
 int main(void) {
 	/* USER CODE BEGIN 1 */
-
 	/* USER CODE END 1 */
 
 	/* MCU Configuration--------------------------------------------------------*/
@@ -114,7 +116,31 @@ int main(void) {
 		/* USER CODE BEGIN 3 */
 
 		ADCPollingMethodUpdate();
+		ModeState[0] = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
+		if(ModeState[1] == 1 && ModeState[0] == 0)
+		{
+			if(ADCMode == 0)
+			{
+				ADCMode = 1;
+				//ADCOutputConverted = ADCChannel[0].data*3300/(2^12);
+			}
+			else if(ADCMode == 1)
+			{
+				ADCMode = 0;
+				//ADCOutputConverted = ADCChannel[2].data*
+			}
+		}
+		if(ADCMode == 0)
+		{
+			ADCOutputConverted = ADCChannel[0].data*3300/(4096);
+		}
+		else
+		{
+			ADCOutputConverted = ((ADCChannel[2].data*3300/4096-760)/2.5)+25;
+		}
+		ModeState[1] = ModeState[0];
 	}
+
 	/* USER CODE END 3 */
 }
 
