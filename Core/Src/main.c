@@ -46,9 +46,9 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 uint16_t ADCMode = 0;
-float ADCOutputConverted = 0;
-uint16_t adcdata[2] = { 0 };
-uint16_t ModeState[2] = {0};
+float ADCOutputConverted = 0.0;
+uint32_t adcdata[2] = { 0 };
+uint32_t ModeState[2] = {0};
 
 typedef struct {
 	ADC_ChannelConfTypeDef Config;
@@ -132,11 +132,11 @@ int main(void) {
 		}
 		if(ADCMode == 0)
 		{
-			ADCOutputConverted = ADCChannel[0].data*3300/(4096);
+			ADCOutputConverted = ADCChannel[0].data*3300/(4096.0);
 		}
 		else
 		{
-			ADCOutputConverted = ((ADCChannel[2].data*3300/4096-760)/2.5)+25;
+			ADCOutputConverted = ((ADCChannel[2].data*3300/4096.0-760)/2.5)+25;
 		}
 		ModeState[1] = ModeState[0];
 	}
